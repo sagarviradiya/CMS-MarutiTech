@@ -8,7 +8,8 @@ namespace CMS.Broker.RabbitMQServices
 {
     public interface IPublisher
     {
-        void Publish<T>(T message, string exchangeName, string exchangeType, string routeKey)  where T : class;
+        void PublishInRabbitMQExchange(string queueName, RabbitMQPayLoad message, string exchangeName, string exchangeType, string routeKey);
+        void PublishInRabbitMQQueue(RabbitMQPayLoad message, string queueName);
     }
 
 }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -12,62 +13,102 @@ namespace CMS.Broker.RabbitMQServices
 {
     public class Publisher : IPublisher
     {
-        
-
-        public Publisher()
+        /// <summary>
+        /// Publish message to Exchange
+        /// </summary>
+        /// <typeparam name="T">class</typeparam>
+        /// <param name="message">type of message</param>
+        /// <param name="exchangeName">exchange to route message to queue</param>
+        /// <param name="exchangeType">exchange type  direct,topic, fanout,header</param>
+        /// <param name="routeKey">based on key , exchange will route message to queue</param>
+        public void PublishInRabbitMQExchange(string queueName, RabbitMQPayLoad message, string exchangeName, string exchangeType, string routeKey)
         {
-           
-        }
-
-
-        public void Publish<T>(T message, string exchangeName, string exchangeType, string routeKey)
-            where T : class
-        {
-            var rabbitConnectionService = RabbitMqConnectionService.SingleInstance;
-            if (message == null)
-                return;
-            var channel = rabbitConnectionService.GetModel();
             try
             {
-                channel.ExchangeDeclare(exchangeName, exchangeType, true, false, null);
+                if (message == null || message.MessageBody == null)
+                    return;
 
-                var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+                var rabbitConnectionService = RabbitMqConnectionService.SingleInstance;
+
+                var connection = rabbitConnectionService.Connection;
+                var channel = rabbitConnectionService.Channel;
+                channel.ExchangeDeclare(exchangeName, exchangeType, true, false, null);
+                channel.QueueBind(queueName, exchangeName, routeKey, null);
+
                 var properties = channel.CreateBasicProperties();
 
                 properties.Persistent = true;
-
-                channel.BasicPublish(exchangeName, routeKey, properties, sendBytes);
+                channel.BasicQos(0, 1, false);
+                if (message.MessageBody is IEnumerable messages)
+                {
+                    foreach (var item in messages)
+                    {
+                        byte[] messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
+                        channel.BasicPublish(exchangeName, routeKey.ToLower(), null, messageBytes);
+                    }
+                }
+                else
+                {
+                    byte[] messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message.MessageBody));
+                    channel.BasicPublish(exchangeName, routeKey.ToLower(), properties, messageBytes);
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            finally
-            {
-                rabbitConnectionService.Return(channel);
-            }
+
         }
-        //public void PublishStudentCreated(Student student)
-        //{
+        /// <summary>
+        /// Publish message to Queue
+        /// </summary>
+        /// <typeparam name="T">class</typeparam>
+        /// <param name="message">object of message</param>
+        /// <param name="queueName">queue name directly</param>
+        public void PublishInRabbitMQQueue(RabbitMQPayLoad message, string queueName)
+        {
+            try
+            {
+                if (message == null || message.MessageBody == null)
+                    return;
 
-        //    using (var connection = RabbitMqConnectionService.SingleInstance.GetRabbitMQConnection())
-        //    using (var channel = connection.CreateModel())
-        //    {
-        //        channel.QueueDeclare(queue: ConfigurationManager.AppSettings["RabbitMQQueueName"],
-        //                                durable: true,
-        //                                exclusive: false,
-        //                                autoDelete: false,
-        //                                arguments: null);
-        //        channel.BasicQos(0, 1, false);
+                var rabbitConnectionService = RabbitMqConnectionService.SingleInstance;
 
-        //        string message = JsonConvert.SerializeObject(student);
-        //        var body = Encoding.UTF8.GetBytes(message);
+                var connection = rabbitConnectionService.Connection;
+                var channel = rabbitConnectionService.Channel;
+                channel.QueueDeclare(queueName, true, exclusive: false, autoDelete: false, arguments: null);
 
-        //        channel.BasicPublish(exchange: "",
-        //                                routingKey: ConfigurationManager.AppSettings["RabbitMQQueueName"],
-        //                                basicProperties: null,
-        //                                body: body);
-        //    }
-        //}
+                channel.BasicQos(0, 1, false);
+                if (message.MessageBody is IEnumerable messages)
+                {
+                    foreach (var item in messages)
+                    {
+                        var dataObj = JsonConvert.SerializeObject(item);
+                        byte[] messageBytes = Encoding.UTF8.GetBytes(dataObj);
+                        var properties = channel.CreateBasicProperties();
+
+                        properties.Persistent = true;
+                        channel.BasicQos(0, 1, false);
+                        channel.BasicPublish(string.Empty, queueName, properties, messageBytes);
+                    }
+                }
+                else
+                {
+                    var dataObj = JsonConvert.SerializeObject(message.MessageBody);
+                    byte[] messageBytes = Encoding.UTF8.GetBytes(dataObj);
+                    var properties = channel.CreateBasicProperties();
+
+                    properties.Persistent = true;
+                    channel.BasicQos(0, 1, false);
+                    channel.BasicPublish(string.Empty, queueName, properties, messageBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
     }
 }
