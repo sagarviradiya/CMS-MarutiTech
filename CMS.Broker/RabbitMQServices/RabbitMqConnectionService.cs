@@ -11,16 +11,12 @@ namespace CMS.Broker.RabbitMQServices
     {
 
         private static readonly Lazy<RabbitMqConnectionService> _instance = new Lazy<RabbitMqConnectionService>(() => new RabbitMqConnectionService());
+        private readonly IConnection _connection;
 
-        private RabbitMqConnectionService() { }
+        private RabbitMqConnectionService() => _connection = GetRabbitMQConnection();
 
-        public static RabbitMqConnectionService SingleInstance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        public static RabbitMqConnectionService SingleInstance => _instance.Value;
+      
         public IConnection GetRabbitMQConnection()
         {
 
@@ -33,6 +29,20 @@ namespace CMS.Broker.RabbitMQServices
             };
 
             return connectionFactory.CreateConnection();
+        }
+        public IModel GetModel()
+        {
+            return _connection.CreateModel();
+        }
+        public bool Return(IModel obj)
+        {
+            if (obj.IsOpen)
+                return true;
+            else
+            {
+                obj?.Dispose();
+                return false;
+            }
         }
 
     }

@@ -54,6 +54,8 @@ namespace CMS.Consumer.Services
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 Debug.WriteLine(" [x] Received {0}", message);
+                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
             };
             channel.BasicConsume(queue: ConfigurationManager.AppSettings["RabbitMQQueueName"],
                                  autoAck: true,

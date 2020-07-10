@@ -187,6 +187,7 @@
     <Compile Include="RabbitMQServices\IPublisher.cs" />
     <Compile Include="RabbitMQServices\Publisher.cs" />
     <Compile Include="RabbitMQServices\RabbitMqConnectionService.cs" />
+    <Compile Include="RabbitMQServices\RabbitMQMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -241,6 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Commons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

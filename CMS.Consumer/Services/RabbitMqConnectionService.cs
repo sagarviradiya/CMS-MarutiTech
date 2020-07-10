@@ -11,17 +11,14 @@ namespace CMS.Consumer.Services
     {
 
         private static readonly Lazy<RabbitMqConnectionService> _instance = new Lazy<RabbitMqConnectionService>(() => new RabbitMqConnectionService());
+        private readonly IConnection _connection;
+
+        private RabbitMqConnectionService() => _connection = GetRabbitMQConnection();
 
 
-        private RabbitMqConnectionService() { }
 
-        public static RabbitMqConnectionService SingleInstance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        public static RabbitMqConnectionService SingleInstance => _instance.Value;
+       
         public IConnection GetRabbitMQConnection()
         {
 
@@ -35,6 +32,11 @@ namespace CMS.Consumer.Services
 
             return connectionFactory.CreateConnection();
         }
+        public IModel GetModel()
+        {
+            return _connection.CreateModel();
+        }
+        
 
     }
 }
