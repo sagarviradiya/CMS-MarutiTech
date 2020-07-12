@@ -14,7 +14,7 @@ namespace CMS.RabbitMQ.Common.Services
     {
 
         private static readonly Lazy<RabbitMqConnectionService> _instance = new Lazy<RabbitMqConnectionService>(() => new RabbitMqConnectionService());
-        private static ConnectionFactory factory;
+        private static ConnectionFactory connectionFactory;
         private IConnection _connection;
         private IModel _channel;
         private static object _connectionLockObj = new object();
@@ -28,7 +28,7 @@ namespace CMS.RabbitMQ.Common.Services
         public IConnection Connection { get => _connection; private set => _connection = value; }
         public IModel Channel { get => _channel; private set => _channel = value; }
 
-        private void ReconnectWithTry()
+        private void RetryConnection()
         {
             Close();
 
@@ -48,9 +48,9 @@ namespace CMS.RabbitMQ.Common.Services
                 }
             }
         }
-        private void Connection_ConnectionShutdown(object sender, ShutdownEventArgs e)
+        private void Connection_Shutdown(object sender, ShutdownEventArgs e)
         {
-            ReconnectWithTry();
+            RetryConnection();
         }
 
         private void Close()
@@ -83,7 +83,7 @@ namespace CMS.RabbitMQ.Common.Services
             {
                 return;
             }
-            factory = new ConnectionFactory()
+            connectionFactory = new ConnectionFactory()
             {
                 HostName = ConfigurationManager.AppSettings["RabbitMQHostName"],
                 Port = Convert.ToInt32(ConfigurationManager.AppSettings["RabbitMqPort"]),
@@ -97,14 +97,14 @@ namespace CMS.RabbitMQ.Common.Services
                 {
                     if (_connection == null || !_connection.IsOpen)
                     {
-                        _connection = factory.CreateConnection();
+                        _connection = connectionFactory.CreateConnection();
                         _channel = _connection.CreateModel();
-                        _connection.ConnectionShutdown += Connection_ConnectionShutdown;
+                        _connection.ConnectionShutdown += Connection_Shutdown;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    ;
                 }
             }
         }
@@ -125,22 +125,21 @@ namespace CMS.RabbitMQ.Common.Services
         }
         public void Init()
         {
-            RabbitMqConnectionService.SingleInstance.CheckConnection();
-            var connection = RabbitMqConnectionService.SingleInstance.Connection;
-            var channel = RabbitMqConnectionService.SingleInstance.Channel;
+            CheckConnection();
+
             var routekeys = Enum.GetNames(typeof(StudentConsumerEvents)).ToList() ?? new List<string>();
 
-            channel.BasicQos(0, 1, false);
+            _channel.BasicQos(0, 1, false);
             foreach (var queue in Enum.GetNames(typeof(Queues)))
             {
-                channel.ExchangeDeclare(Exchange.CMS_Exchange.ToString().ToLower(), ExchangeType.Direct, true, false, null);
-                channel.QueueDeclare(queue.ToLower(), true, false, false, null);
+                _channel.ExchangeDeclare(Exchange.CMS_Exchange.ToString().ToLower(), ExchangeType.Direct, true, false, null);
+                _channel.QueueDeclare(queue.ToLower(), true, false, false, null);
             }
             var studentConsumerEvents = EnumUtility.BindQueueToStudentEvents();
 
             foreach (var routeKey in studentConsumerEvents.Value)
             {
-                channel.QueueBind(studentConsumerEvents.Key.ToLower(), Exchange.CMS_Exchange.ToString().ToLower(), routeKey.ToLower());
+                _channel.QueueBind(studentConsumerEvents.Key.ToLower(), Exchange.CMS_Exchange.ToString().ToLower(), routeKey.ToLower());
             }
 
         }

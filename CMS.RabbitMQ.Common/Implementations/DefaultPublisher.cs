@@ -31,7 +31,6 @@ namespace CMS.RabbitMQ.Common.Implementations
                 if (message == null || message.MessageBody == null)
                     return;
 
-
                 var rabbitConnectionService = RabbitMqConnectionService.SingleInstance;
                 rabbitConnectionService.Init();
 
