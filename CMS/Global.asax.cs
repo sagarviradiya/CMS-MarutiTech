@@ -1,8 +1,8 @@
-﻿using System.Web.Http;
+﻿using CMS.RabbitMQ.Common.Services;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using CMS.Consumer.Services;
 namespace CMS
 {
     public class WebApiApplication : System.Web.HttpApplication
@@ -14,7 +14,7 @@ namespace CMS
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            RabbitMQConsumerManager.Instance.Init();
+            ConsumerManager.Instance.Init();
         }
     }
 }

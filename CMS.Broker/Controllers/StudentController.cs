@@ -1,5 +1,7 @@
 ﻿using CMS.Broker.Models;
-using CMS.Broker.RabbitMQServices;
+using CMS.RabbitMQ.Common.Enums;
+using CMS.RabbitMQ.Common.Models;
+using CMS.RabbitMQ.Common.Publisher;
 using RabbitMQ.Client;
 using System.Web.Http;
 
@@ -17,10 +19,8 @@ namespace CMS.Broker.Controllers
 
             //p.PublishInRabbitMQQueue(payload "student-queue");
             student.Address = "send via  exchage to student queue";
-            p.PublishInRabbitMQExchange("student-queue",payload, "exchange", ExchangeType.Direct, "#.student.#");
-            student.Address = "send via  exchage to college queue";
-
-            p.PublishInRabbitMQExchange("college-queue",payload, "exchange", ExchangeType.Direct, "#.college.#");
+            p.PublishInRabbitMQExchange(Queues.CMS_Student.ToString().ToLower(), payload, Exchange.CMS_Exchange.ToString().ToLower(), ExchangeType.Direct, StudentConsumerEvents.Student_Login.ToString().ToLower());
+            
 
         }
 

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RabbitMQ.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.6.1.0\lib\net461\RabbitMQ.Client.dll</HintPath>
     </Reference>
@@ -38,6 +41,7 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
@@ -63,14 +67,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Common\RabbitMqConnectionService.cs" />
+    <Compile Include="Enums\CollegeConsumerEvents.cs" />
+    <Compile Include="Enums\EnumUtility.cs" />
+    <Compile Include="Enums\Exchange.cs" />
+    <Compile Include="Enums\Queues.cs" />
+    <Compile Include="Enums\StudentConsumerEvents.cs" />
+    <Compile Include="Consumers\CollegeConsumer.cs" />
+    <Compile Include="Consumers\StudentConsumer.cs" />
+    <Compile Include="Implementations\DefaultPublisher.cs" />
+    <Compile Include="Interfaces\IConsumer.cs" />
+    <Compile Include="Models\RabbitMQPayLoad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IPublisher.cs" />
+    <Compile Include="Publisher\Publisher.cs" />
+    <Compile Include="Services\ConsumerManager.cs" />
+    <Compile Include="Implementations\DefaultConsumer.cs" />
+    <Compile Include="Services\RabbitMqConnectionService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

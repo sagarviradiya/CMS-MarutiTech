@@ -1,8 +1,4 @@
-﻿using CMS.Broker.RabbitMQServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using CMS.RabbitMQ.Common.Services;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -19,7 +15,7 @@ namespace CMS.Broker
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            RabbitMqConnectionService.SingleInstance.Connect();
+            RabbitMqConnectionService.SingleInstance.CheckConnection();
         }
     }
 }
