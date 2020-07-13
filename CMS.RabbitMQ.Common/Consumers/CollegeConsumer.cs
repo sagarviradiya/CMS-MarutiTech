@@ -13,13 +13,8 @@ namespace CMS.RabbitMQ.Common.Consumers
         private static readonly Lazy<CollegeConsumer> _singleton = new Lazy<CollegeConsumer>(() => new CollegeConsumer());
         private CollegeConsumer() { }
 
-        public static CollegeConsumer Instance
-        {
-            get
-            {
-                return _singleton.Value;
-            }
-        }
+        public static CollegeConsumer Instance => _singleton.Value;
+       
 
         public override void Init()
         {

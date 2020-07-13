@@ -9,15 +9,9 @@ namespace CMS.RabbitMQ.Common.Consumers
         private static readonly Lazy<StudentConsumer> _singleton = new Lazy<StudentConsumer>(() => new StudentConsumer());
         private StudentConsumer() { }
 
-        public static StudentConsumer Instance
-        {
-            get
-            {
-                return _singleton.Value;
-            }
-        }
+        public static StudentConsumer Instance => _singleton.Value;
 
-        public  override void Init()
+        public override void Init()
         {
             ConsumeFromExchange(Queues.CMS_Student.ToString(), Exchange.CMS_Exchange.ToString());
         }
