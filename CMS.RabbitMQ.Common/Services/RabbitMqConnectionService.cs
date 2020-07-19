@@ -14,6 +14,10 @@ namespace CMS.RabbitMQ.Common.Services
     {
 
         private static readonly Lazy<RabbitMqConnectionService> _instance = new Lazy<RabbitMqConnectionService>(() => new RabbitMqConnectionService());
+        private readonly string hostName;
+        private readonly int port;
+        private readonly string userName;
+        private readonly string password;
         private static ConnectionFactory connectionFactory;
         private IConnection _connection;
         private IModel _channel;
@@ -21,7 +25,6 @@ namespace CMS.RabbitMQ.Common.Services
 
         private RabbitMqConnectionService()
         {
-            CheckConnection();
         }
         public static RabbitMqConnectionService SingleInstance => _instance.Value;
 
@@ -77,7 +80,7 @@ namespace CMS.RabbitMQ.Common.Services
         }
 
 
-        public void CheckConnection()
+        public void CheckConnection(string hostName, int port, string userName, string password)
         {
             if (_connection != null && _connection.IsOpen)
             {
@@ -85,10 +88,10 @@ namespace CMS.RabbitMQ.Common.Services
             }
             connectionFactory = new ConnectionFactory()
             {
-                HostName = ConfigurationManager.AppSettings["RabbitMQHostName"],
-                Port = Convert.ToInt32(ConfigurationManager.AppSettings["RabbitMqPort"]),
-                UserName = ConfigurationManager.AppSettings["RabbitMQUserName"],
-                Password = ConfigurationManager.AppSettings["RabbitMQPassword"],
+                HostName =hostName,
+                Port = port,
+                UserName = userName,
+                Password = password ,
                 RequestedHeartbeat = TimeSpan.FromSeconds(30),
             };
             lock (_connectionLockObj)

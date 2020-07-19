@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>CMS.Models</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="ResponseModels" />
+    </ItemGroup>
+
+</Project>
