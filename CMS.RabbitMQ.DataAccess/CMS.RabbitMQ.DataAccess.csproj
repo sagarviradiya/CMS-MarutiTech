@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CMS.Data.Models\CMS.Data.Models.csproj" />
+      <ProjectReference Include="..\CMS.Data\CMS.Data.csproj" />
+      <ProjectReference Include="..\CMS.RabbitMQ.Core\CMS.RabbitMQ.Core.csproj" />
+    </ItemGroup>
+
+</Project>

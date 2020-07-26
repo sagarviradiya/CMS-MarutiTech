@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace CMS.Data.Common
+namespace CMS.RabbitMQ.Core.Services
 {
     internal static class ConfigurationService
     {

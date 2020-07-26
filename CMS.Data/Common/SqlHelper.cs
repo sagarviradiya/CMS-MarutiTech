@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace CMS.Data
+namespace CMS.Data.Common
 {
-    public class SqlHelper
+    internal sealed class SqlHelper
     {
-        protected SqlCommand _command;
+        private SqlCommand _command;
 
-        protected SqlConnection _conn;
+        private SqlConnection _conn;
 
         // Internal members
-        protected string _connString;
-        protected bool _disposed;
-        protected SqlTransaction _trans;
+        private readonly string _connString;
+        private bool _disposed;
+        private SqlTransaction _trans;
 
         /// <summary>
         ///     Constructor using global connection string.
@@ -49,7 +49,7 @@ namespace CMS.Data
 
 
         // Creates a SqlConnection using the current connection string
-        protected void Connect()
+        private void Connect()
         {
             _conn = new SqlConnection(_connString);
             _conn.Open();
@@ -261,7 +261,7 @@ namespace CMS.Data
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {

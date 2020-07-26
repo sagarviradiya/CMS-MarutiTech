@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Data.SqlClient" Version="1.0.19269.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.6" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.6" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.6" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CMS.API.Models\CMS.API.Models.csproj" />
+      <ProjectReference Include="..\CMS.Core\CMS.Core.csproj" />
+      <ProjectReference Include="..\CMS.Data.Models\CMS.Data.Models.csproj" />
+    </ItemGroup>
+
+</Project>

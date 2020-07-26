@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.API.Models", "CMS.API.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Data.Models", "CMS.Data.Models\CMS.Data.Models.csproj", "{C8BF11EC-54EC-4E4B-BABE-94EB1A976FCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.RabbitMQ.DataAccess", "CMS.RabbitMQ.DataAccess\CMS.RabbitMQ.DataAccess.csproj", "{43C26F07-FCE9-4867-BFFA-C928AC52DCAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{C8BF11EC-54EC-4E4B-BABE-94EB1A976FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8BF11EC-54EC-4E4B-BABE-94EB1A976FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8BF11EC-54EC-4E4B-BABE-94EB1A976FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C26F07-FCE9-4867-BFFA-C928AC52DCAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C26F07-FCE9-4867-BFFA-C928AC52DCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C26F07-FCE9-4867-BFFA-C928AC52DCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C26F07-FCE9-4867-BFFA-C928AC52DCAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

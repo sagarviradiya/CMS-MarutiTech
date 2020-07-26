@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
-namespace CMS.Data
+namespace CMS.Data.Common
 {
-    public class DBHelper
+    internal class DBHelper
     {
         #region enums
 

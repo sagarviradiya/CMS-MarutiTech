@@ -6,16 +6,15 @@ using CMS.Data.Models;
 
 namespace CMS.Data.DataServices
 {
-    public class StudentDBService : IStudentService
+    public abstract class StudentDBService : IStudentService
     {
-        private readonly string _connectionString;
         private readonly SqlHelper _dbHelper;
 
 
-        public StudentDBService()
+        protected StudentDBService()
         {
-            _connectionString = ConfigurationService.Get("ConnectionString");
-            _dbHelper = new SqlHelper(_connectionString);
+            var connectionString = ConfigurationService.Get("ConnectionString");
+            _dbHelper = new SqlHelper(connectionString);
         }
 
 
